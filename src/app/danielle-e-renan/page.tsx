@@ -1,63 +1,76 @@
+'use client'
+
 import Image from "next/image";
-import Link from "next/link";
-import { Monograma } from '@/components/monograma'
+import { AnimatedIconsBackground } from "@/components/animated-icons-background";
+import { Countdown } from "@/components/countdown";
+import { PhotosMosaic } from "@/components/photos-mosaic";
+import { ScrollIndicator } from "@/components/scrool-indicator";
 
 export default function Home() {
   return (
-    <main className="flex flex-col lg:flex-row bg-bege min-h-screen w-full">
-      <section className="w-full lg:w-[40vw] p-4 flex flex-col lg:justify-between lg:h-screen">
-        <header className="flex flex-row items-center text-green gap-4 lg:gap-10 mb-4 lg:mb-0 lg:h-16">
-          <Monograma className="size-16 lg:size-30" />
-          <nav className="w-full h-full">
-            <ul className="w-full h-full font-niconne text-base lg:text-2xl opacity-85 text-green flex flex-row gap-2 lg:gap-4 items-center">
-              <li>
-                <Link href="/" className="hover:underline">
-                  Início
-                </Link>
-              </li>
-              <li>
-                <Link href="/" className="hover:underline">
-                  Cerimonia
-                </Link>
-              </li>
-              <li>
-                <Link href="/" className="hover:underline">
-                  Confirmar presença
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </header>
-
-        <div className="w-full min-h-70 flex flex-col justify-center items-center px-4 lg:px-10 py-4 lg:h-full lg:py-0">
-          <h1 className="text-2xl lg:text-6xl font-serif text-center"> Bem-vindo ao portal do nosso casamento! </h1>
-        </div>
-
-        <footer className="h-16 hidden lg:block">
-
-        </footer>
+    <main className="snap-y snap-mandatory overflow-hidden overflow-y-scroll h-screen w-screen">
+      <section className="snap-start snap-always relative flex items-center justify-center h-screen w-screen bg-black px-6">
+        <video
+          src="/vezzane.mp4"
+          poster="/vezzane-10.png"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute opacity-30 grayscale-100 top-0 left-0 w-full h-full object-cover"
+        />
+        {/* <div className="absolute top-0 left-0 w-full h-full bg-green/80" /> */}
+        <h1 className="text-5xl sm:text-[100px] z-10 -rotate-6 opacity-90 leading-none text-center font-bold text-white font-serif">
+          Danielle
+          <br />
+          <span className="text-2xl sm:text-[40px] relative -top-1 md:-top-5">and</span>
+          <br />
+          Renan
+        </h1>
+        <ScrollIndicator />
       </section>
 
-      <section className="flex flex-col lg:flex-row w-full lg:w-[60vw] gap-0 lg:gap-4">
-        <div className="flex-1 bg-green relative image-container-mobile">
-          <Image
-            src="/nos.webp"
-            alt=""
-            fill
-            className="object-cover w-full h-full grayscale"
-            sizes="(min-width: 1024px) 50vw, 100vw"
-          />
-          <div className="w-full h-full absolute top-0 left-0 bg-green/50" />
+      <section className="snap-start snap-always relative flex items-center justify-center h-screen w-screen bg-green flex-col gap-6 sm:gap-10 px-6">
+  
+        <AnimatedIconsBackground />
+        
+        <div className="z-10">
+          <Countdown expiryTimestamp={new Date('2026-06-25T15:00:00-03:00')} />
         </div>
-        <div className="flex-1 bg-green relative image-container-mobile">
-          <Image
-            src="/nos-2.jpg"
-            alt=""
-            fill
-            className="object-cover w-full h-full grayscale"
-            sizes="(min-width: 1024px) 50vw, 100vw"
-          />
-          <div className="w-full h-full absolute top-0 left-0 bg-green/50" />
+        <h2 className="text-xl sm:text-xl font-bold text-green-foreground leading-8 sm:leading-8 font-serif max-w-sm text-center z-10">
+          Faltam apenas alguns dias para o nosso grande dia!
+        </h2>
+      </section>
+
+      <section className="snap-start snap-always relative flex items-center justify-center h-screen w-screen bg-bege px-6 py-8">
+        <div className="relative z-10 flex flex-col gap-6 items-center text-center text-green">
+          <div className="flex flex-col gap-6">
+            <p className="text-xs uppercase tracking-[0.6em] text-green font-semibold">Villa Vezzane</p>
+            <h2 className="text-3xl font-serif font-bold leading-tight">25/06/26 · 15h</h2>
+            <p className="text-sm text-green max-w-md font-serif">
+              Cerimônia e festa no mesmo endereço, em meio às árvores e à vista da Serra da Cantareira.
+            </p>
+          </div>
+          <div className="w-full max-w-3xl">
+            <div className="overflow-hidden rounded-3xl">
+              <Image
+                src="/vezzane.jpg"
+                alt="Villa Vezzane"
+                width={1200}
+                height={800}
+                className="w-full h-64 object-cover sm:h-80"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="snap-start snap-always relative flex items-center justify-center h-screen w-screen bg-green px-6 py-10">
+        <div className="relative z-10 flex flex-col items-center gap-8 text-center text-bege">
+          <p className="text-xs uppercase tracking-[0.55em] font-semibold">OBRIGADO!</p>
+          <h2 className="text-2xl sm:text-3xl font-serif font-bold">Te esperamos no nosso grande dia</h2>
+          <PhotosMosaic />
         </div>
       </section>
     </main>

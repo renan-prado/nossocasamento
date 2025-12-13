@@ -6,6 +6,7 @@
 
   --bege: #f5f4eb;
   --green: #292c20;
+  --green-foreground: #f5f4eb
 }
 
 @theme inline {
@@ -16,6 +17,7 @@
 
   --color-bege: var(--bege);
   --color-green: var(--green);
+  --color-green-foreground: var(--green-foreground);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -34,6 +36,20 @@
   font-family: var(--font-niconne);
 }
 
+@utility bg-vezanne {
+  background-image: url('/gemini.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-blend-mode: multiply;
+  background-color: rgba(0, 0, 0, 0.2);
+  /* filter: blur(3px); */
+}
+
+@utility bg-bege {
+  background-color: var(--bege);
+}
+
 body {
   background: var(--background);
   color: var(--green);
@@ -49,4 +65,103 @@ body {
   .image-container-mobile {
     height: 100vh;
   }
+}
+
+@keyframes scroll-dot-down {
+  0% {
+    top: 6px;
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  50% {
+    top: 28px;
+    opacity: 1;
+  }
+
+  65% {
+    top: 28px;
+    opacity: 0;
+  }
+
+  100% {
+    top: 6px;
+    opacity: 0;
+  }
+}
+
+@keyframes scroll-dot-up {
+  0% {
+    top: 28px;
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  50% {
+    top: 6px;
+    opacity: 1;
+  }
+
+  65% {
+    top: 6px;
+    opacity: 0;
+  }
+
+  100% {
+    top: 28px;
+    opacity: 0;
+  }
+}
+
+.animate-scroll-dot-down {
+  animation: scroll-dot-down 2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+.animate-scroll-dot-up {
+  animation: scroll-dot-up 2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes pulse-border {
+  0%, 100% {
+    border-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    border-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+  }
+}
+
+.animate-pulse-border {
+  animation: pulse-border 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) rotate(var(--rotation));
+  }
+  25% {
+    transform: translate(20px, -30px) rotate(calc(var(--rotation) + 10deg));
+  }
+  50% {
+    transform: translate(-15px, -50px) rotate(calc(var(--rotation) - 5deg));
+  }
+  75% {
+    transform: translate(-30px, -20px) rotate(calc(var(--rotation) + 15deg));
+  }
+}
+
+.animate-float {
+  animation: float var(--duration, 40s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  will-change: transform;
+  --rotation: 0deg;
 }
