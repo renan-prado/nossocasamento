@@ -136,13 +136,15 @@ export function GuestManager() {
   }
 
   return (
-    <div className="flex flex-col gap-6 p-6 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-neutral-900">Gerenciamento de Convidados</h1>
+    <div className="flex flex-col gap-4 sm:gap-6 p-4 sm:p-6 max-w-6xl mx-auto">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl font-bold text-neutral-900 leading-tight">
+            Gerenciamento de Convidados
+          </h1>
           <p className="text-sm text-neutral-500 mt-0.5">Danielle & Renan · 25/06/2026</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <Button
             variant="outline"
             size="icon"
@@ -154,42 +156,42 @@ export function GuestManager() {
           </Button>
           <Button onClick={openNew} className="flex items-center gap-2">
             <Plus className="h-4 w-4" />
-            Adicionar convidado
+            <span className="hidden sm:inline">Adicionar convidado</span>
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-neutral-500">Total</CardTitle>
+          <CardHeader className="pb-1 sm:pb-2 px-4 pt-4">
+            <CardTitle className="text-xs sm:text-sm font-medium text-neutral-500">Total</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-neutral-900">{stats.total}</p>
+          <CardContent className="px-4 pb-4">
+            <p className="text-2xl sm:text-3xl font-bold text-neutral-900">{stats.total}</p>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-neutral-500">Confirmados</CardTitle>
+          <CardHeader className="pb-1 sm:pb-2 px-4 pt-4">
+            <CardTitle className="text-xs sm:text-sm font-medium text-neutral-500">Confirmados</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-green-700">{stats.accepted}</p>
+          <CardContent className="px-4 pb-4">
+            <p className="text-2xl sm:text-3xl font-bold text-green-700">{stats.accepted}</p>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-neutral-500">Recusados</CardTitle>
+          <CardHeader className="pb-1 sm:pb-2 px-4 pt-4">
+            <CardTitle className="text-xs sm:text-sm font-medium text-neutral-500">Recusados</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-red-600">{stats.declined}</p>
+          <CardContent className="px-4 pb-4">
+            <p className="text-2xl sm:text-3xl font-bold text-red-600">{stats.declined}</p>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-neutral-500">Pendentes</CardTitle>
+          <CardHeader className="pb-1 sm:pb-2 px-4 pt-4">
+            <CardTitle className="text-xs sm:text-sm font-medium text-neutral-500">Pendentes</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-neutral-400">{stats.pending}</p>
+          <CardContent className="px-4 pb-4">
+            <p className="text-2xl sm:text-3xl font-bold text-neutral-400">{stats.pending}</p>
           </CardContent>
         </Card>
       </div>
@@ -208,49 +210,53 @@ export function GuestManager() {
               </Button>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <SortHeader field="name">Nome</SortHeader>
-                  <TableHead>Busca</TableHead>
-                  <SortHeader field="familyName">Família</SortHeader>
-                  <SortHeader field="status">Status</SortHeader>
-                  <TableHead className="text-right">Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sorted.map((guest) => (
-                  <TableRow key={guest.id}>
-                    <TableCell className="font-medium">{guest.name}</TableCell>
-                    <TableCell className="text-neutral-500 text-sm">{guest.searchName}</TableCell>
-                    <TableCell className="text-neutral-700">{guest.familyName}</TableCell>
-                    <TableCell>
-                      <StatusBadge status={guest.status} />
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-neutral-500 hover:text-neutral-900 cursor-pointer"
-                          onClick={() => openEdit(guest)}
-                        >
-                          <Pencil className="h-3.5 w-3.5" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-neutral-500 hover:text-red-600 cursor-pointer"
-                          onClick={() => setDeletingGuest(guest)}
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
-                      </div>
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <SortHeader field="name">Nome</SortHeader>
+                    <TableHead className="hidden md:table-cell">Busca</TableHead>
+                    <SortHeader field="familyName">Família</SortHeader>
+                    <SortHeader field="status">Status</SortHeader>
+                    <TableHead className="text-right">Ações</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {sorted.map((guest) => (
+                    <TableRow key={guest.id}>
+                      <TableCell className="font-medium">{guest.name}</TableCell>
+                      <TableCell className="hidden md:table-cell text-neutral-500 text-sm">
+                        {guest.searchName}
+                      </TableCell>
+                      <TableCell className="text-neutral-700 text-sm">{guest.familyName}</TableCell>
+                      <TableCell>
+                        <StatusBadge status={guest.status} />
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-neutral-500 hover:text-neutral-900 cursor-pointer"
+                            onClick={() => openEdit(guest)}
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-neutral-500 hover:text-red-600 cursor-pointer"
+                            onClick={() => setDeletingGuest(guest)}
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
