@@ -1,23 +1,33 @@
 import type { Metadata } from "next";
-import { Geist, Niconne, Petit_Formal_Script } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import type { PropsWithChildren } from "react";
 
-const geistSans = Geist({
+const geistSans = localFont({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
+  src: [
+    { path: "../../public/fonts/geist-latin-ext.woff2", weight: "100 900", style: "normal" },
+    { path: "../../public/fonts/geist-latin.woff2", weight: "100 900", style: "normal" },
+  ],
+  display: "swap",
 });
 
-const niconne = Niconne({
+const niconne = localFont({
   variable: "--font-niconne",
-  subsets: ["latin"],
-  weight: "400",
+  src: [
+    { path: "../../public/fonts/niconne-latin-ext.woff2", weight: "400", style: "normal" },
+    { path: "../../public/fonts/niconne-latin.woff2", weight: "400", style: "normal" },
+  ],
+  display: "swap",
 });
 
-const serif = Petit_Formal_Script({
+const serif = localFont({
   variable: "--font-serif",
-  subsets: ["latin"],
-  weight: "400",
+  src: [
+    { path: "../../public/fonts/petit-formal-script-latin-ext.woff2", weight: "400", style: "normal" },
+    { path: "../../public/fonts/petit-formal-script-latin.woff2", weight: "400", style: "normal" },
+  ],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
