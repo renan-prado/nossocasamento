@@ -95,10 +95,9 @@ export default function Home() {
         </div>
       </SnapSection>
 
-      <SnapSection name="photos" className="bg-green px-6 py-10">
-        <div className="relative z-10 flex flex-col items-center gap-8 text-center text-bege">
-          <p className="text-xs uppercase tracking-[0.55em] font-semibold">OBRIGADO!</p>
-          <h2 className="text-2xl sm:text-3xl font-serif font-bold">Te esperamos no nosso grande dia</h2>
+      <SnapSection name="photos" className="bg-black px-3 sm:px-6 py-6">
+        <div className="relative z-10 flex h-full w-full flex-col items-center gap-4 pt-6 text-center text-bege">
+          <h2 className="text-2xl sm:text-3xl font-serif font-bold opacity-85">Te esperamos no nosso grande dia...</h2>
           <PhotosMosaic />
         </div>
       </SnapSection>
