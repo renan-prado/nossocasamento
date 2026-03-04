@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useTimer } from 'react-timer-hook';
 
 interface CountdownProps {
@@ -7,12 +8,22 @@ interface CountdownProps {
 }
 
 export function Countdown({ expiryTimestamp }: CountdownProps) {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const { seconds, minutes, hours, days } = useTimer({
     expiryTimestamp,
     onExpire: () => console.log('Chegou o grande dia!'),
   });
 
   const formatNumber = (num: number) => String(num).padStart(2, '0');
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col text-green-foreground font-serif items-center justify-center gap-3">

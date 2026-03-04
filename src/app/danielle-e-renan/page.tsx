@@ -6,6 +6,8 @@ import { Countdown } from "@/components/countdown";
 import { PhotosMosaic } from "@/components/photos-mosaic";
 import { ScrollIndicator } from "@/components/scrool-indicator";
 import { SnapSection } from "@/components/SnapSection";
+import { RsvpSection } from "@/components/RsvpSection";
+import { ToastContainer } from "@/components/ToastContainer";
 
 export default function Home() {
   return (
@@ -31,7 +33,19 @@ export default function Home() {
         <ScrollIndicator />
       </SnapSection>
 
-      {/* crie aqui uma section para confirmação de presença (rsvp) */}
+      <SnapSection
+        name="rsvp"
+        className="bg-bege flex-col gap-8 px-6 py-10 text-green"
+      >
+        <Image
+          src="/nos-mesmos/fundo-01.jpg"
+          alt=""
+          fill
+          className="absolute inset-0 object-cover brightness-[0.20]"
+          priority={false}
+        />
+        <RsvpSection />
+      </SnapSection>
 
       <SnapSection
         name="countdown"
@@ -79,6 +93,7 @@ export default function Home() {
           <PhotosMosaic />
         </div>
       </SnapSection>
+      <ToastContainer />
     </main>
   );
 }
