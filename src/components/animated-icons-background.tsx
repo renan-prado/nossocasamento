@@ -117,9 +117,9 @@ export function AnimatedIconsBackground() {
             alt=""
             width={pos.size}
             height={pos.size}
-            className="w-full h-full object-contain opacity-25"
+            className="w-full h-full object-contain opacity-5"
             style={{
-              filter: 'brightness(0)',
+              filter: 'brightness(0) invert(1)',
             }}
           />
         </div>

@@ -49,9 +49,16 @@ export default function Home() {
 
       <SnapSection
         name="countdown"
-        className="bg-green flex-col gap-6 sm:gap-10 px-6"
+        className="flex-col gap-6 sm:gap-10 px-6"
       >
-  
+        <Image
+          src="/mosaico/mosaico (3).JPG"
+          alt=""
+          fill
+          className="absolute inset-0 object-cover brightness-25 grayscale"
+          priority={false}
+        />
+
         <AnimatedIconsBackground />
         
         <div className="z-10">
@@ -62,7 +69,7 @@ export default function Home() {
         </h2>
       </SnapSection>
 
-      <SnapSection name="venue" className="bg-bege px-6 py-8">
+      <SnapSection name="venue" className="bg-bege hidden px-6 py-8">
         <div className="relative z-10 flex flex-col gap-6 items-center text-center text-green">
           <div className="flex flex-col gap-6">
             <p className="text-xs uppercase tracking-[0.6em] text-green font-semibold">Villa Vezzane</p>
