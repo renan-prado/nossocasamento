@@ -68,10 +68,10 @@ export default function Home() {
             <p className="text-xs uppercase tracking-[0.6em] text-green font-semibold">Villa Vezzane</p>
             <h2 className="text-3xl font-serif font-bold leading-tight">25/06/26 · 15h</h2>
             <p className="text-sm text-green max-w-md font-serif">
-              Cerimônia e festa no mesmo endereço, em meio às árvores e à vista da Serra da Cantareira.
+              R. Benedito Fontana, 510 - Mairiporã, SP, 07627-200
             </p>
           </div>
-          <div className="w-full max-w-3xl">
+          <div className="w-full max-w-3xl flex flex-col gap-3">
             <div className="overflow-hidden rounded-3xl">
               <Image
                 src="/vezzane.jpg"
@@ -82,6 +82,15 @@ export default function Home() {
                 priority
               />
             </div>
+            <a
+              href="https://maps.app.goo.gl/78mTaqR8n51Ngy9A6"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2.5 self-center px-5 py-2.5 rounded-full border border-green/20 bg-white/70 backdrop-blur-sm text-sm font-semibold text-green shadow-sm hover:shadow-md hover:bg-white transition-all duration-200 mt-4"
+            >
+              <Image src="/google-maps-icon.svg" alt="Google Maps" width={18} height={18} />
+              Ver no Google Maps
+            </a>
           </div>
         </div>
       </SnapSection>
