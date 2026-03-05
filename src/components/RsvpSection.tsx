@@ -104,8 +104,8 @@ export function RsvpSection() {
 
   return (
     <div className="relative z-10 flex flex-col items-center gap-8 max-w-lg w-full px-4">
-      <div className="flex flex-col items-center gap-2">
-        <p className="text-xs uppercase tracking-[0.5em] text-white/70 font-light">
+      <div className="flex flex-col items-center gap-3">
+        <p className="text-xs uppercase tracking-[0.5em] text-white/70 font-light text-center w-60 md:w-full">
           Casamento Danielle & Renan
         </p>
         <h2 className="text-3xl sm:text-4xl font-serif font-bold text-center text-white drop-shadow-md">
