@@ -19,9 +19,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  GUEST_TYPE_LABELS,
   type Guest,
   type GuestPayload,
   type GuestStatus,
+  type GuestType,
   normalizeSearchName,
 } from "@/firebase/guests";
 
@@ -37,6 +39,7 @@ const defaultForm: GuestPayload = {
   searchName: "",
   familyName: "",
   status: "pending",
+  type: "full",
 };
 
 export function GuestFormDialog({ open, guest, onClose, onSubmit }: Props) {
@@ -50,6 +53,7 @@ export function GuestFormDialog({ open, guest, onClose, onSubmit }: Props) {
         searchName: guest.searchName,
         familyName: guest.familyName,
         status: guest.status,
+        type: guest.type,
       });
     } else {
       setForm(defaultForm);
@@ -111,6 +115,25 @@ export function GuestFormDialog({ open, guest, onClose, onSubmit }: Props) {
               onChange={(e) => setForm((prev) => ({ ...prev, familyName: e.target.value }))}
               placeholder="Ex: flores_prado"
             />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="type">Tipo</Label>
+            <Select
+              value={form.type}
+              onValueChange={(v) => setForm((prev) => ({ ...prev, type: v as GuestType }))}
+            >
+              <SelectTrigger id="type">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {(Object.entries(GUEST_TYPE_LABELS) as [GuestType, string][]).map(([value, label]) => (
+                  <SelectItem key={value} value={value}>
+                    {label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="flex flex-col gap-1.5">

@@ -14,8 +14,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  GUEST_TYPE_LABELS,
+  GUEST_TYPE_WEIGHT,
   type Guest,
   type GuestPayload,
+  type GuestType,
   createGuest,
   deleteGuest,
   listGuests,
@@ -24,7 +27,7 @@ import {
 import { GuestDeleteDialog } from "@/components/admin/GuestDeleteDialog";
 import { GuestFormDialog } from "@/components/admin/GuestFormDialog";
 
-type SortField = "name" | "familyName" | "status";
+type SortField = "name" | "familyName" | "status" | "type";
 type SortDir = "asc" | "desc";
 
 const statusLabel: Record<string, string> = {
@@ -40,7 +43,22 @@ function StatusBadge({ status }: { status: string }) {
   if (status === "declined") {
     return <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Recusado</Badge>;
   }
-  return <Badge variant="secondary">Pendente</Badge>;
+  return <Badge className="bg-neutral-100 text-neutral-600 hover:bg-neutral-100">Pendente</Badge>;
+}
+
+const TYPE_BADGE_STYLE: Record<GuestType, string> = {
+  full: "bg-blue-100 text-blue-800 hover:bg-blue-100",
+  half: "bg-amber-100 text-amber-800 hover:bg-amber-100",
+  supplier: "bg-purple-100 text-purple-800 hover:bg-purple-100",
+  exempt: "bg-neutral-100 text-neutral-600 hover:bg-neutral-100",
+};
+
+function TypeBadge({ type }: { type: GuestType }) {
+  return (
+    <Badge className={TYPE_BADGE_STYLE[type]}>
+      {GUEST_TYPE_LABELS[type]}
+    </Badge>
+  );
 }
 
 export function GuestManager() {
@@ -87,10 +105,17 @@ export function GuestManager() {
 
   const stats = useMemo(
     () => ({
-      total: guests.length,
+      pessoas: guests.length,
+      convidados: guests.reduce((sum, g) => sum + GUEST_TYPE_WEIGHT[g.type ?? "full"], 0),
       accepted: guests.filter((g) => g.status === "accepted").length,
       declined: guests.filter((g) => g.status === "declined").length,
       pending: guests.filter((g) => g.status === "pending").length,
+      byType: {
+        full: guests.filter((g) => (g.type ?? "full") === "full").length,
+        half: guests.filter((g) => g.type === "half").length,
+        supplier: guests.filter((g) => g.type === "supplier").length,
+        exempt: guests.filter((g) => g.type === "exempt").length,
+      },
     }),
     [guests],
   );
@@ -161,13 +186,21 @@ export function GuestManager() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
         <Card>
           <CardHeader className="pb-1 sm:pb-2 px-4 pt-4">
-            <CardTitle className="text-xs sm:text-sm font-medium text-neutral-500">Total</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-medium text-neutral-500">Pessoas</CardTitle>
           </CardHeader>
           <CardContent className="px-4 pb-4">
-            <p className="text-2xl sm:text-3xl font-bold text-neutral-900">{stats.total}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-neutral-900">{stats.pessoas}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-1 sm:pb-2 px-4 pt-4">
+            <CardTitle className="text-xs sm:text-sm font-medium text-neutral-500">Convidados</CardTitle>
+          </CardHeader>
+          <CardContent className="px-4 pb-4">
+            <p className="text-2xl sm:text-3xl font-bold text-neutral-900">{stats.convidados % 1 === 0 ? stats.convidados : stats.convidados.toFixed(1)}</p>
           </CardContent>
         </Card>
         <Card>
@@ -197,6 +230,27 @@ export function GuestManager() {
       </div>
 
       <Card>
+        <CardContent className="px-4 py-3 sm:px-5 sm:py-4">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            {(
+              [
+                { key: "full", color: "text-blue-700", dot: "bg-blue-500" },
+                { key: "half", color: "text-amber-700", dot: "bg-amber-500" },
+                { key: "supplier", color: "text-purple-700", dot: "bg-purple-500" },
+                { key: "exempt", color: "text-neutral-500", dot: "bg-neutral-400" },
+              ] as const
+            ).map(({ key, color, dot }) => (
+              <div key={key} className="flex items-center gap-1.5">
+                <span className={`h-2 w-2 rounded-full shrink-0 ${dot}`} />
+                <span className="text-xs text-neutral-500">{GUEST_TYPE_LABELS[key]}</span>
+                <span className={`text-sm font-bold ${color}`}>{stats.byType[key]}</span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
         <CardContent className="p-0">
           {loading ? (
             <div className="flex items-center justify-center py-16 text-neutral-400 text-sm">
@@ -217,6 +271,7 @@ export function GuestManager() {
                     <SortHeader field="name">Nome</SortHeader>
                     <TableHead className="hidden md:table-cell">Busca</TableHead>
                     <SortHeader field="familyName">Família</SortHeader>
+                    <SortHeader field="type">Tipo</SortHeader>
                     <SortHeader field="status">Status</SortHeader>
                     <TableHead className="text-right">Ações</TableHead>
                   </TableRow>
@@ -229,6 +284,9 @@ export function GuestManager() {
                         {guest.searchName}
                       </TableCell>
                       <TableCell className="text-neutral-700 text-sm">{guest.familyName}</TableCell>
+                      <TableCell>
+                        <TypeBadge type={guest.type ?? "full"} />
+                      </TableCell>
                       <TableCell>
                         <StatusBadge status={guest.status} />
                       </TableCell>

@@ -13,12 +13,29 @@ import { getFirestoreDb } from "@/firebase/client";
 
 export type GuestStatus = "pending" | "accepted" | "declined";
 
+export type GuestType = "full" | "half" | "supplier" | "exempt";
+
+export const GUEST_TYPE_LABELS: Record<GuestType, string> = {
+  full: "Inteiro",
+  half: "Meia",
+  supplier: "Fornecedor",
+  exempt: "Isento",
+};
+
+export const GUEST_TYPE_WEIGHT: Record<GuestType, number> = {
+  full: 1,
+  half: 0.5,
+  supplier: 0.5,
+  exempt: 0,
+};
+
 export type Guest = {
   id: string;
   name: string;
   searchName: string;
   familyName: string;
   status: GuestStatus;
+  type: GuestType;
   updatedAt: Date | null;
 };
 
@@ -27,6 +44,7 @@ export type GuestPayload = {
   searchName: string;
   familyName: string;
   status: GuestStatus;
+  type: GuestType;
 };
 
 export function normalizeSearchName(name: string): string {
@@ -47,6 +65,7 @@ export async function listGuests(): Promise<Guest[]> {
     searchName: d.get("searchName") ?? "",
     familyName: d.get("familyName") ?? "",
     status: (d.get("status") as GuestStatus) ?? "pending",
+    type: (d.get("type") as GuestType) ?? "full",
     updatedAt: d.get("updatedAt")?.toDate?.() ?? null,
   }));
 }
