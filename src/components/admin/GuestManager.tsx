@@ -53,6 +53,16 @@ const TYPE_BADGE_STYLE: Record<GuestType, string> = {
   exempt: "bg-neutral-100 text-neutral-600 hover:bg-neutral-100",
 };
 
+function SimuladoBadge({ status }: { status: string }) {
+  if (status === "accepted") {
+    return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Confirmado</Badge>;
+  }
+  if (status === "declined") {
+    return <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Não vai</Badge>;
+  }
+  return <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-100">Dúvida</Badge>;
+}
+
 function TypeBadge({ type }: { type: GuestType }) {
   return (
     <Badge className={TYPE_BADGE_STYLE[type]}>
@@ -347,7 +357,7 @@ export function GuestManager() {
                         <StatusBadge status={guest.status} />
                       </TableCell>
                       <TableCell>
-                        <StatusBadge status={guest.simulado} />
+                        <SimuladoBadge status={guest.simulado} />
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-1">

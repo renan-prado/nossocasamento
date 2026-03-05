@@ -180,9 +180,9 @@ export function GuestFormDialog({ open, guest, onClose, onSubmit }: Props) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="pending">Pendente</SelectItem>
+                  <SelectItem value="pending">Dúvida</SelectItem>
                   <SelectItem value="accepted">Confirmado</SelectItem>
-                  <SelectItem value="declined">Recusado</SelectItem>
+                  <SelectItem value="declined">Não vai</SelectItem>
                 </SelectContent>
               </Select>
             )}
