@@ -39,6 +39,7 @@ const defaultForm: GuestPayload = {
   searchName: "",
   familyName: "",
   status: "pending",
+  simulado: "pending",
   type: "full",
 };
 
@@ -53,6 +54,7 @@ export function GuestFormDialog({ open, guest, onClose, onSubmit }: Props) {
         searchName: guest.searchName,
         familyName: guest.familyName,
         status: guest.status,
+        simulado: guest.simulado,
         type: guest.type,
       });
     } else {
@@ -65,6 +67,14 @@ export function GuestFormDialog({ open, guest, onClose, onSubmit }: Props) {
       ...prev,
       name: value,
       searchName: normalizeSearchName(value),
+    }));
+  }
+
+  function handleStatusChange(value: GuestStatus) {
+    setForm((prev) => ({
+      ...prev,
+      status: value,
+      simulado: value !== "pending" ? value : prev.simulado,
     }));
   }
 
@@ -138,10 +148,7 @@ export function GuestFormDialog({ open, guest, onClose, onSubmit }: Props) {
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="status">Status</Label>
-            <Select
-              value={form.status}
-              onValueChange={(v) => setForm((prev) => ({ ...prev, status: v as GuestStatus }))}
-            >
+            <Select value={form.status} onValueChange={(v) => handleStatusChange(v as GuestStatus)}>
               <SelectTrigger id="status">
                 <SelectValue />
               </SelectTrigger>
@@ -151,6 +158,34 @@ export function GuestFormDialog({ open, guest, onClose, onSubmit }: Props) {
                 <SelectItem value="declined">Recusado</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="simulado">
+              Simulado
+              <span className="ml-1.5 text-[11px] font-normal text-neutral-400">
+                previsão para pendentes
+              </span>
+            </Label>
+            {form.status !== "pending" ? (
+              <p className="text-sm text-neutral-500 px-3 py-2 rounded-md bg-neutral-50 border border-neutral-200">
+                Segue o status ({form.status === "accepted" ? "Confirmado" : "Recusado"})
+              </p>
+            ) : (
+              <Select
+                value={form.simulado}
+                onValueChange={(v) => setForm((prev) => ({ ...prev, simulado: v as GuestStatus }))}
+              >
+                <SelectTrigger id="simulado">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pending">Pendente</SelectItem>
+                  <SelectItem value="accepted">Confirmado</SelectItem>
+                  <SelectItem value="declined">Recusado</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
           </div>
         </div>
 

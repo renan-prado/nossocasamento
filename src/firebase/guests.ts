@@ -35,6 +35,7 @@ export type Guest = {
   searchName: string;
   familyName: string;
   status: GuestStatus;
+  simulado: GuestStatus;
   type: GuestType;
   updatedAt: Date | null;
 };
@@ -44,6 +45,7 @@ export type GuestPayload = {
   searchName: string;
   familyName: string;
   status: GuestStatus;
+  simulado: GuestStatus;
   type: GuestType;
 };
 
@@ -65,6 +67,7 @@ export async function listGuests(): Promise<Guest[]> {
     searchName: d.get("searchName") ?? "",
     familyName: d.get("familyName") ?? "",
     status: (d.get("status") as GuestStatus) ?? "pending",
+    simulado: (d.get("simulado") as GuestStatus) ?? (d.get("status") as GuestStatus) ?? "pending",
     type: (d.get("type") as GuestType) ?? "full",
     updatedAt: d.get("updatedAt")?.toDate?.() ?? null,
   }));

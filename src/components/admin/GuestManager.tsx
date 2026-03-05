@@ -27,7 +27,7 @@ import {
 import { GuestDeleteDialog } from "@/components/admin/GuestDeleteDialog";
 import { GuestFormDialog } from "@/components/admin/GuestFormDialog";
 
-type SortField = "name" | "familyName" | "status" | "type";
+type SortField = "name" | "familyName" | "status" | "simulado" | "type";
 type SortDir = "asc" | "desc";
 
 const statusLabel: Record<string, string> = {
@@ -103,22 +103,34 @@ export function GuestManager() {
     });
   }, [guests, sortField, sortDir]);
 
-  const stats = useMemo(
-    () => ({
+  const stats = useMemo(() => {
+    const accepted = guests.filter((g) => g.status === "accepted");
+    const simuladoAccepted = guests.filter((g) => g.simulado === "accepted");
+    const simuladoDeclined = guests.filter((g) => g.simulado === "declined");
+    const weighted = (list: typeof guests) =>
+      list.reduce((sum, g) => sum + GUEST_TYPE_WEIGHT[g.type ?? "full"], 0);
+
+    return {
       pessoas: guests.length,
-      convidados: guests.reduce((sum, g) => sum + GUEST_TYPE_WEIGHT[g.type ?? "full"], 0),
-      accepted: guests.filter((g) => g.status === "accepted").length,
+      convidados: weighted(guests),
+      acceptedPessoas: accepted.length,
+      acceptedConvidados: weighted(accepted),
       declined: guests.filter((g) => g.status === "declined").length,
       pending: guests.filter((g) => g.status === "pending").length,
+      simulado: {
+        acceptedPessoas: simuladoAccepted.length,
+        acceptedConvidados: weighted(simuladoAccepted),
+        declinedPessoas: simuladoDeclined.length,
+        declinedConvidados: weighted(simuladoDeclined),
+      },
       byType: {
         full: guests.filter((g) => (g.type ?? "full") === "full").length,
         half: guests.filter((g) => g.type === "half").length,
         supplier: guests.filter((g) => g.type === "supplier").length,
         exempt: guests.filter((g) => g.type === "exempt").length,
       },
-    }),
-    [guests],
-  );
+    };
+  }, [guests]);
 
   function openNew() {
     setEditingGuest(null);
@@ -186,7 +198,7 @@ export function GuestManager() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
         <Card>
           <CardHeader className="pb-1 sm:pb-2 px-4 pt-4">
             <CardTitle className="text-xs sm:text-sm font-medium text-neutral-500">Pessoas</CardTitle>
@@ -200,15 +212,27 @@ export function GuestManager() {
             <CardTitle className="text-xs sm:text-sm font-medium text-neutral-500">Convidados</CardTitle>
           </CardHeader>
           <CardContent className="px-4 pb-4">
-            <p className="text-2xl sm:text-3xl font-bold text-neutral-900">{stats.convidados % 1 === 0 ? stats.convidados : stats.convidados.toFixed(1)}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-neutral-900">
+              {stats.convidados % 1 === 0 ? stats.convidados : stats.convidados.toFixed(1)}
+            </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-1 sm:pb-2 px-4 pt-4">
-            <CardTitle className="text-xs sm:text-sm font-medium text-neutral-500">Confirmados</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-medium text-neutral-500">Pessoas confirmadas</CardTitle>
           </CardHeader>
           <CardContent className="px-4 pb-4">
-            <p className="text-2xl sm:text-3xl font-bold text-green-700">{stats.accepted}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-green-700">{stats.acceptedPessoas}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-1 sm:pb-2 px-4 pt-4">
+            <CardTitle className="text-xs sm:text-sm font-medium text-neutral-500">Convidados confirmados</CardTitle>
+          </CardHeader>
+          <CardContent className="px-4 pb-4">
+            <p className="text-2xl sm:text-3xl font-bold text-green-700">
+              {stats.acceptedConvidados % 1 === 0 ? stats.acceptedConvidados : stats.acceptedConvidados.toFixed(1)}
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -229,26 +253,57 @@ export function GuestManager() {
         </Card>
       </div>
 
-      <Card>
-        <CardContent className="px-4 py-3 sm:px-5 sm:py-4">
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            {(
-              [
-                { key: "full", color: "text-blue-700", dot: "bg-blue-500" },
-                { key: "half", color: "text-amber-700", dot: "bg-amber-500" },
-                { key: "supplier", color: "text-purple-700", dot: "bg-purple-500" },
-                { key: "exempt", color: "text-neutral-500", dot: "bg-neutral-400" },
-              ] as const
-            ).map(({ key, color, dot }) => (
-              <div key={key} className="flex items-center gap-1.5">
-                <span className={`h-2 w-2 rounded-full shrink-0 ${dot}`} />
-                <span className="text-xs text-neutral-500">{GUEST_TYPE_LABELS[key]}</span>
-                <span className={`text-sm font-bold ${color}`}>{stats.byType[key]}</span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        <Card>
+          <CardContent className="px-4 py-3 sm:px-5 sm:py-4">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              <span className="text-xs font-medium text-neutral-500 shrink-0">Por tipo</span>
+              {(
+                [
+                  { key: "full", color: "text-blue-700", dot: "bg-blue-500" },
+                  { key: "half", color: "text-amber-700", dot: "bg-amber-500" },
+                  { key: "supplier", color: "text-purple-700", dot: "bg-purple-500" },
+                  { key: "exempt", color: "text-neutral-500", dot: "bg-neutral-400" },
+                ] as const
+              ).map(({ key, color, dot }) => (
+                <div key={key} className="flex items-center gap-1.5">
+                  <span className={`h-2 w-2 rounded-full shrink-0 ${dot}`} />
+                  <span className="text-xs text-neutral-500">{GUEST_TYPE_LABELS[key]}</span>
+                  <span className={`text-sm font-bold ${color}`}>{stats.byType[key]}</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="px-4 py-3 sm:px-5 sm:py-4">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              <span className="text-xs font-medium text-neutral-500 shrink-0">Simulado</span>
+              <div className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full shrink-0 bg-green-500" />
+                <span className="text-xs text-neutral-500">Confirmados</span>
+                <span className="text-sm font-bold text-green-700">{stats.simulado.acceptedPessoas}</span>
+                <span className="text-xs text-neutral-400">
+                  ({stats.simulado.acceptedConvidados % 1 === 0
+                    ? stats.simulado.acceptedConvidados
+                    : stats.simulado.acceptedConvidados.toFixed(1)} conv.)
+                </span>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+              <div className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full shrink-0 bg-red-400" />
+                <span className="text-xs text-neutral-500">Recusados</span>
+                <span className="text-sm font-bold text-red-600">{stats.simulado.declinedPessoas}</span>
+                <span className="text-xs text-neutral-400">
+                  ({stats.simulado.declinedConvidados % 1 === 0
+                    ? stats.simulado.declinedConvidados
+                    : stats.simulado.declinedConvidados.toFixed(1)} conv.)
+                </span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       <Card>
         <CardContent className="p-0">
@@ -273,6 +328,7 @@ export function GuestManager() {
                     <SortHeader field="familyName">Família</SortHeader>
                     <SortHeader field="type">Tipo</SortHeader>
                     <SortHeader field="status">Status</SortHeader>
+                    <SortHeader field="simulado">Simulado</SortHeader>
                     <TableHead className="text-right">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -289,6 +345,9 @@ export function GuestManager() {
                       </TableCell>
                       <TableCell>
                         <StatusBadge status={guest.status} />
+                      </TableCell>
+                      <TableCell>
+                        <StatusBadge status={guest.simulado} />
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-1">
