@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { ShoppingBag, X, Trash2 } from "lucide-react";
+import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useCartStore } from "@/store/cart-store";
 
@@ -10,7 +10,7 @@ export function GiftCart() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { items, removeItem, clearCart, totalItems, totalPrice } = useCartStore();
+  const { items, addItem, removeItem, decrementItem, clearCart, totalItems, totalPrice } = useCartStore();
 
   const count = totalItems();
   const total = totalPrice();
@@ -24,13 +24,12 @@ export function GiftCart() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/stripe/checkout", {
+      const res = await fetch("/api/mercadopago/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           items: items.map((item) => ({
-            priceId: item.priceId,
-            productId: item.productId,
+            giftId: item.giftId,
             quantity: item.quantity,
           })),
         }),
@@ -86,7 +85,7 @@ export function GiftCart() {
           <div className="flex-1 overflow-y-auto px-6 py-4 flex flex-col gap-3">
             {items.map((item) => (
               <div
-                key={item.priceId}
+                key={item.giftId}
                 className="flex items-center gap-3 rounded-xl bg-neutral-50 p-3"
               >
                 <div className="relative w-14 h-14 rounded-lg overflow-hidden bg-neutral-100 shrink-0">
@@ -105,22 +104,34 @@ export function GiftCart() {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-neutral-900 truncate">{item.name}</p>
+                  <p className="text-sm font-semibold text-neutral-900 truncate uppercase">{item.name}</p>
                   <p className="text-xs text-neutral-500">
-                    {item.quantity}x{" "}
                     {(item.price / 100).toLocaleString("pt-BR", {
                       style: "currency",
                       currency: "BRL",
-                    })}
+                    })}{" "}
+                    cada
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => removeItem(item.priceId)}
-                  className="text-neutral-400 hover:text-red-500 transition-colors cursor-pointer p-1"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => decrementItem(item.giftId)}
+                    className="flex items-center justify-center w-7 h-7 rounded-full bg-neutral-200 text-neutral-700 hover:bg-neutral-300 active:scale-95 transition-all cursor-pointer"
+                  >
+                    <Minus className="w-3 h-3" />
+                  </button>
+                  <span className="text-sm font-bold text-neutral-900 w-5 text-center tabular-nums">
+                    {item.quantity}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => addItem({ giftId: item.giftId, name: item.name, price: item.price, imageUrl: item.imageUrl })}
+                    className="flex items-center justify-center w-7 h-7 rounded-full bg-neutral-200 text-neutral-700 hover:bg-neutral-300 active:scale-95 transition-all cursor-pointer"
+                  >
+                    <Plus className="w-3 h-3" />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -141,7 +152,7 @@ export function GiftCart() {
               disabled={loading}
               className="w-full rounded-xl bg-neutral-900 text-white py-3 text-sm font-semibold hover:bg-neutral-800 active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
             >
-              {loading ? "Redirecionando..." : "Presentear os noivos"}
+              {loading ? "Redirecionando..." : "Finalizar presente"}
             </button>
 
             <button

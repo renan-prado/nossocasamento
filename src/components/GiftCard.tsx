@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ShoppingBag, Check } from "lucide-react";
+import { Minus, Plus, ShoppingBag } from "lucide-react";
 import type { GiftProduct } from "@/app/api/gifts/route";
 import { useCartStore } from "@/store/cart-store";
 
@@ -10,24 +10,14 @@ type Props = {
 };
 
 export function GiftCard({ gift }: Props) {
-  const { items, addItem } = useCartStore();
-  const inCart = items.some((i) => i.priceId === gift.priceId);
+  const { items, addItem, decrementItem } = useCartStore();
+  const cartItem = items.find((i) => i.giftId === gift.giftId);
+  const quantity = cartItem?.quantity ?? 0;
 
   const formattedPrice = (gift.price / 100).toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
   });
-
-  function handleAdd() {
-    if (gift.purchased || inCart) return;
-    addItem({
-      priceId: gift.priceId,
-      productId: gift.productId,
-      name: gift.name,
-      price: gift.price,
-      imageUrl: gift.imageUrl,
-    });
-  }
 
   return (
     <div
@@ -62,7 +52,7 @@ export function GiftCard({ gift }: Props) {
 
       <div className="flex flex-col flex-1 gap-3 p-4">
         <div className="flex flex-col gap-1">
-          <p className="text-sm font-semibold text-white leading-tight line-clamp-2">
+          <p className="text-sm font-semibold text-white leading-tight line-clamp-2 uppercase">
             {gift.name}
           </p>
           {gift.description && (
@@ -74,28 +64,37 @@ export function GiftCard({ gift }: Props) {
           <span className="text-sm font-bold text-white/90">{formattedPrice}</span>
 
           {!gift.purchased && (
-            <button
-              type="button"
-              onClick={handleAdd}
-              disabled={inCart}
-              className={`flex items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
-                inCart
-                  ? "bg-white/20 text-white/60 cursor-default"
-                  : "bg-white text-neutral-900 hover:bg-white/90 hover:shadow-md active:scale-95"
-              }`}
-            >
-              {inCart ? (
-                <>
-                  <Check className="w-3 h-3" />
-                  No carrinho
-                </>
-              ) : (
-                <>
-                  <ShoppingBag className="w-3 h-3" />
-                  Adicionar
-                </>
-              )}
-            </button>
+            quantity === 0 ? (
+              <button
+                type="button"
+                onClick={() => addItem({ giftId: gift.giftId, name: gift.name, price: gift.price, imageUrl: gift.imageUrl })}
+                className="flex items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold bg-white text-neutral-900 hover:bg-white/90 hover:shadow-md active:scale-95 transition-all cursor-pointer"
+              >
+                <ShoppingBag className="w-3 h-3" />
+                Adicionar
+              </button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => decrementItem(gift.giftId)}
+                  className="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 text-white hover:bg-white/30 active:scale-95 transition-all cursor-pointer"
+                >
+                  <Minus className="w-3 h-3" />
+                </button>
+                <span className="text-sm font-bold text-white w-4 text-center tabular-nums">
+                  {quantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => addItem({ giftId: gift.giftId, name: gift.name, price: gift.price, imageUrl: gift.imageUrl })}
+                  disabled={gift.unique}
+                  className="flex items-center justify-center w-7 h-7 rounded-full bg-white text-neutral-900 hover:bg-white/90 active:scale-95 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-default"
+                >
+                  <Plus className="w-3 h-3" />
+                </button>
+              </div>
+            )
           )}
         </div>
       </div>

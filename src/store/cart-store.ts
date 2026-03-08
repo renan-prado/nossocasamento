@@ -1,8 +1,7 @@
 import { create } from "zustand";
 
 export type CartItem = {
-  priceId: string;
-  productId: string;
+  giftId: string;
   name: string;
   price: number;
   imageUrl: string | null;
@@ -12,7 +11,8 @@ export type CartItem = {
 type CartStore = {
   items: CartItem[];
   addItem: (item: Omit<CartItem, "quantity">) => void;
-  removeItem: (priceId: string) => void;
+  removeItem: (giftId: string) => void;
+  decrementItem: (giftId: string) => void;
   clearCart: () => void;
   totalItems: () => number;
   totalPrice: () => number;
@@ -23,11 +23,11 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
   addItem: (item) => {
     set((state) => {
-      const existing = state.items.find((i) => i.priceId === item.priceId);
+      const existing = state.items.find((i) => i.giftId === item.giftId);
       if (existing) {
         return {
           items: state.items.map((i) =>
-            i.priceId === item.priceId ? { ...i, quantity: i.quantity + 1 } : i
+            i.giftId === item.giftId ? { ...i, quantity: i.quantity + 1 } : i
           ),
         };
       }
@@ -35,10 +35,25 @@ export const useCartStore = create<CartStore>((set, get) => ({
     });
   },
 
-  removeItem: (priceId) => {
+  removeItem: (giftId) => {
     set((state) => ({
-      items: state.items.filter((i) => i.priceId !== priceId),
+      items: state.items.filter((i) => i.giftId !== giftId),
     }));
+  },
+
+  decrementItem: (giftId) => {
+    set((state) => {
+      const item = state.items.find((i) => i.giftId === giftId);
+      if (!item) return state;
+      if (item.quantity <= 1) {
+        return { items: state.items.filter((i) => i.giftId !== giftId) };
+      }
+      return {
+        items: state.items.map((i) =>
+          i.giftId === giftId ? { ...i, quantity: i.quantity - 1 } : i
+        ),
+      };
+    });
   },
 
   clearCart: () => set({ items: [] }),

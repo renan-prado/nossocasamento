@@ -76,7 +76,7 @@ export function GiftSection() {
           {fetchState === "idle" && gifts.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 pb-24">
               {gifts.map((gift) => (
-                <GiftCard key={gift.priceId} gift={gift} />
+                <GiftCard key={gift.giftId} gift={gift} />
               ))}
             </div>
           )}
