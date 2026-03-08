@@ -8,6 +8,7 @@ import { ScrollIndicator } from "@/components/scrool-indicator";
 import { SnapSection } from "@/components/SnapSection";
 import { RsvpSection } from "@/components/RsvpSection";
 import { GiftSection } from "@/components/GiftSection";
+import { MenuSection } from "@/components/MenuSection";
 import { ToastContainer } from "@/components/ToastContainer";
 
 export default function Home() {
@@ -32,6 +33,17 @@ export default function Home() {
           Renan
         </h1>
         <ScrollIndicator />
+      </SnapSection>
+
+      <SnapSection name="menu" className="bg-bege px-6">
+        <Image
+          src="/mosaico/mosaico (2).JPG"
+          alt=""
+          fill
+          className="absolute inset-0 object-cover brightness-[0.15]"
+          priority={false}
+        />
+        <MenuSection />
       </SnapSection>
 
       <SnapSection
@@ -68,16 +80,20 @@ export default function Home() {
         />
 
         <AnimatedIconsBackground />
+
+        <h2 className="text-md font-bold text-green-foreground leading-8 sm:leading-8 font-serif max-w-sm text-center z-10">
+          Em Junho de 2026, ao pôr do sol de uma quinta-feira de inverno, vamos celebrar nosso amor em uma cerimônia intimista.
+        </h2>
         
         <div className="z-10">
           <Countdown expiryTimestamp={new Date('2026-06-25T15:00:00-03:00')} />
         </div>
-        <h2 className="text-xl sm:text-xl font-bold text-green-foreground leading-8 sm:leading-8 font-serif max-w-sm text-center z-10">
-          Faltam apenas alguns dias para o nosso grande dia!
+        <h2 className="text-md font-bold text-green-foreground leading-8 sm:leading-8 font-serif max-w-sm text-center z-10">
+          Este dia só faz sentido ao lado de pessoas que fazem parte da nossa história.
         </h2>
       </SnapSection>
 
-      <SnapSection name="venue" className="bg-bege hidden px-6 py-8">
+      <SnapSection name="venue" className="bg-bege px-6 py-8">
         <div className="relative z-10 flex flex-col gap-6 items-center text-center text-green">
           <div className="flex flex-col gap-6">
             <p className="text-xs uppercase tracking-[0.6em] text-green font-semibold">Villa Vezzane</p>

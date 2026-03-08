@@ -12,6 +12,7 @@ const baseSectionClasses =
 export function SnapSection({ children, name, className }: SnapSectionProps) {
   return (
     <section
+      id={name}
       className={`${baseSectionClasses} ${className ?? ""}`}
       data-section-name={name}
     >

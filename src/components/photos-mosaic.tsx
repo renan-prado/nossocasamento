@@ -34,8 +34,9 @@ export function PhotosMosaic() {
               src={photo.src}
               alt={photo.alt}
               fill
+              quality={95}
               className="object-cover transition-transform duration-500 hover:scale-110"
-              sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, (max-width: 1280px) 20vw, 16vw"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 35vw, (max-width: 1280px) 28vw, 22vw"
             />
           </div>
         ))}
