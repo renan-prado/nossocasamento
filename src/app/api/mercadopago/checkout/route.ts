@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const url = result.sandbox_init_point ?? result.init_point;
+    const url = result.init_point;
     return NextResponse.json({ url });
   } catch (error) {
     console.error("Error creating MP preference:", error);
