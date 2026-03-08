@@ -7,6 +7,7 @@ import { PhotosMosaic } from "@/components/photos-mosaic";
 import { ScrollIndicator } from "@/components/scrool-indicator";
 import { SnapSection } from "@/components/SnapSection";
 import { RsvpSection } from "@/components/RsvpSection";
+import { GiftSection } from "@/components/GiftSection";
 import { ToastContainer } from "@/components/ToastContainer";
 
 export default function Home() {
@@ -45,6 +46,13 @@ export default function Home() {
           priority={false}
         />
         <RsvpSection />
+      </SnapSection>
+
+      <SnapSection
+        name="gifts"
+        className="flex-col px-0 py-0 overflow-hidden"
+      >
+        <GiftSection />
       </SnapSection>
 
       <SnapSection

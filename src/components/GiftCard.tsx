@@ -1,0 +1,104 @@
+"use client";
+
+import Image from "next/image";
+import { ShoppingBag, Check } from "lucide-react";
+import type { GiftProduct } from "@/app/api/gifts/route";
+import { useCartStore } from "@/store/cart-store";
+
+type Props = {
+  gift: GiftProduct;
+};
+
+export function GiftCard({ gift }: Props) {
+  const { items, addItem } = useCartStore();
+  const inCart = items.some((i) => i.priceId === gift.priceId);
+
+  const formattedPrice = (gift.price / 100).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+
+  function handleAdd() {
+    if (gift.purchased || inCart) return;
+    addItem({
+      priceId: gift.priceId,
+      productId: gift.productId,
+      name: gift.name,
+      price: gift.price,
+      imageUrl: gift.imageUrl,
+    });
+  }
+
+  return (
+    <div
+      className={`relative flex flex-col rounded-2xl overflow-hidden bg-white/10 backdrop-blur-sm border transition-all duration-200 ${
+        gift.purchased
+          ? "border-white/10 opacity-60"
+          : "border-white/20 hover:border-white/40 hover:bg-white/15"
+      }`}
+    >
+      <div className="relative w-full aspect-square bg-white/5">
+        {gift.imageUrl ? (
+          <Image
+            src={gift.imageUrl}
+            alt={gift.name}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <ShoppingBag className="w-12 h-12 text-white/20" />
+          </div>
+        )}
+        {gift.purchased && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[2px]">
+            <span className="text-xs font-semibold text-white/80 uppercase tracking-widest bg-black/40 px-3 py-1 rounded-full">
+              Presenteado
+            </span>
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-col flex-1 gap-3 p-4">
+        <div className="flex flex-col gap-1">
+          <p className="text-sm font-semibold text-white leading-tight line-clamp-2">
+            {gift.name}
+          </p>
+          {gift.description && (
+            <p className="text-xs text-white/50 line-clamp-2">{gift.description}</p>
+          )}
+        </div>
+
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-auto gap-2">
+          <span className="text-sm font-bold text-white/90">{formattedPrice}</span>
+
+          {!gift.purchased && (
+            <button
+              type="button"
+              onClick={handleAdd}
+              disabled={inCart}
+              className={`flex items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
+                inCart
+                  ? "bg-white/20 text-white/60 cursor-default"
+                  : "bg-white text-neutral-900 hover:bg-white/90 hover:shadow-md active:scale-95"
+              }`}
+            >
+              {inCart ? (
+                <>
+                  <Check className="w-3 h-3" />
+                  No carrinho
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="w-3 h-3" />
+                  Adicionar
+                </>
+              )}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
