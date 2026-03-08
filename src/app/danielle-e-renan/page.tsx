@@ -9,6 +9,7 @@ import { SnapSection } from "@/components/SnapSection";
 import { RsvpSection } from "@/components/RsvpSection";
 import { GiftSection } from "@/components/GiftSection";
 import { MenuSection } from "@/components/MenuSection";
+import { AboutSection } from "@/components/AboutSection";
 import { ToastContainer } from "@/components/ToastContainer";
 
 export default function Home() {
@@ -131,6 +132,17 @@ export default function Home() {
             </a>
           </div>
         </div>
+      </SnapSection>
+
+      <SnapSection name="about" className="bg-black px-6 py-8 overflow-hidden">
+        <Image
+          src="/mosaico/mosaico (25).JPG"
+          alt=""
+          fill
+          className="absolute inset-0 object-cover brightness-[0.12]"
+          priority={false}
+        />
+        <AboutSection />
       </SnapSection>
 
       <SnapSection name="photos" className="bg-black px-3 sm:px-6 py-6">
