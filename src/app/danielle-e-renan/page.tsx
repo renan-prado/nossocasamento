@@ -93,17 +93,24 @@ export default function Home() {
         </h2>
       </SnapSection>
 
-      <SnapSection name="venue" className="bg-bege px-6 py-8">
-        <div className="relative z-10 flex flex-col gap-6 items-center text-center text-green">
+      <SnapSection name="venue" className="bg-black px-6 py-8">
+        <Image
+          src="/vezzane.jpg"
+          alt=""
+          fill
+          className="absolute inset-0 object-cover brightness-[0.15]"
+          priority={false}
+        />
+        <div className="relative z-10 flex flex-col gap-6 items-center text-center text-green-foreground">
           <div className="flex flex-col gap-6">
-            <p className="text-xs uppercase tracking-[0.6em] text-green font-semibold">Villa Vezzane</p>
+            <p className="text-xs uppercase tracking-[0.6em] text-green-foreground/60 font-semibold">Villa Vezzane</p>
             <h2 className="text-3xl font-serif font-bold leading-tight">25/06/26 · 15h</h2>
-            <p className="text-sm text-green max-w-md font-serif">
+            <p className="text-sm text-green-foreground/70 max-w-md font-serif">
               R. Benedito Fontana, 510 - Mairiporã, SP, 07627-200
             </p>
           </div>
           <div className="w-full max-w-3xl flex flex-col gap-3">
-            <div className="overflow-hidden rounded-3xl">
+            <div className="overflow-hidden rounded-3xl ring-1 ring-white/10">
               <Image
                 src="/vezzane.jpg"
                 alt="Villa Vezzane"
@@ -117,7 +124,7 @@ export default function Home() {
               href="https://maps.app.goo.gl/78mTaqR8n51Ngy9A6"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 self-center px-5 py-2.5 rounded-full border border-green/20 bg-white/70 backdrop-blur-sm text-sm font-semibold text-green shadow-sm hover:shadow-md hover:bg-white transition-all duration-200 mt-4"
+              className="inline-flex items-center gap-2.5 self-center px-5 py-2.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm text-sm font-semibold text-green-foreground shadow-sm hover:bg-white/20 transition-all duration-200 mt-4"
             >
               <Image src="/google-maps-icon.svg" alt="Google Maps" width={18} height={18} />
               Ver no Google Maps
