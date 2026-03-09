@@ -58,7 +58,7 @@ export function GiftCard({ gift }: Props) {
 
           {!gift.available ? (
             <span className="text-xs font-semibold text-white/40 uppercase tracking-widest">
-              indisponível
+              Indisponível
             </span>
           ) : (
             quantity === 0 ? (
