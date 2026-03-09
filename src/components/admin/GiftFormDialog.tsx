@@ -25,7 +25,7 @@ const defaultForm = {
   description: "",
   priceFormatted: "",
   imageUrl: "",
-  unique: false,
+  available: true,
 };
 
 export function GiftFormDialog({ open, gift, onClose, onSubmit }: Props) {
@@ -39,7 +39,7 @@ export function GiftFormDialog({ open, gift, onClose, onSubmit }: Props) {
         description: gift.description ?? "",
         priceFormatted: (gift.price / 100).toFixed(2).replace(".", ","),
         imageUrl: gift.imageUrl ?? "",
-        unique: gift.unique,
+        available: gift.available,
       });
     } else {
       setForm(defaultForm);
@@ -66,7 +66,7 @@ export function GiftFormDialog({ open, gift, onClose, onSubmit }: Props) {
         description: form.description.trim() || null,
         price: parsePriceToCentavos(form.priceFormatted),
         imageUrl: form.imageUrl.trim() || null,
-        unique: form.unique,
+        available: form.available,
       });
       onClose();
     } finally {
@@ -137,22 +137,19 @@ export function GiftFormDialog({ open, gift, onClose, onSubmit }: Props) {
             />
           </div>
 
-          <div className="flex items-center gap-3 rounded-lg border border-neutral-200 px-4 py-3">
+          <div className="flex items-center justify-between gap-3 rounded-lg border border-neutral-200 px-4 py-3">
+            <div className="flex flex-col">
+              <Label htmlFor="available" className="cursor-pointer">
+                Disponível
+              </Label>
+            </div>
             <input
               type="checkbox"
-              id="unique"
-              checked={form.unique}
-              onChange={(e) => setForm((prev) => ({ ...prev, unique: e.target.checked }))}
+              id="available"
+              checked={form.available}
+              onChange={(e) => setForm((prev) => ({ ...prev, available: e.target.checked }))}
               className="h-4 w-4 rounded border-neutral-300 cursor-pointer"
             />
-            <div className="flex flex-col">
-              <Label htmlFor="unique" className="cursor-pointer">
-                Presente único
-              </Label>
-              <p className="text-xs text-neutral-400">
-                Marcado como esgotado após ser comprado
-              </p>
-            </div>
           </div>
         </div>
 

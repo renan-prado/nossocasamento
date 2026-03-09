@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { preference } from "@/lib/mercadopago";
-import { getPurchasedProductIds } from "@/firebase/purchases";
 import { listGifts } from "@/firebase/gifts";
+import { saveMessage } from "@/firebase/messages";
 
 type CheckoutItem = {
   giftId: string;
@@ -10,26 +10,22 @@ type CheckoutItem = {
 
 export async function POST(req: NextRequest) {
   try {
-    const { items }: { items: CheckoutItem[] } = await req.json();
+    const { items, guestName, message }: { items: CheckoutItem[]; guestName?: string; message?: string } = await req.json();
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: "No items provided" }, { status: 400 });
     }
 
-    const [purchasedIds, allGifts] = await Promise.all([
-      getPurchasedProductIds(),
-      listGifts(),
-    ]);
+    const allGifts = await listGifts();
+    const giftMap = new Map(allGifts.map((g) => [g.id, g]));
 
-    const alreadyPurchased = items.filter((item) => purchasedIds.has(item.giftId));
-    if (alreadyPurchased.length > 0) {
+    const unavailable = items.filter((item) => giftMap.get(item.giftId)?.available === false);
+    if (unavailable.length > 0) {
       return NextResponse.json(
         { error: "One or more items are no longer available" },
         { status: 409 }
       );
     }
-
-    const giftMap = new Map(allGifts.map((g) => [g.id, g]));
 
     const lineItems = items.flatMap((item) => {
       const gift = giftMap.get(item.giftId);
@@ -51,6 +47,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No valid items found" }, { status: 400 });
     }
 
+    if (guestName && message) {
+      const giftsLabel = items
+        .flatMap((item) => {
+          const gift = giftMap.get(item.giftId);
+          if (!gift) return [];
+          return [`${gift.name} (x${item.quantity})`];
+        })
+        .join(", ");
+
+      await saveMessage({ name: guestName, message, gifts: giftsLabel });
+    }
+
     const origin = req.headers.get("origin") ?? "http://localhost:3000";
     const isHttps = origin.startsWith("https://");
 
@@ -66,6 +74,8 @@ export async function POST(req: NextRequest) {
         notification_url: isHttps ? `${origin}/api/mercadopago/webhook` : undefined,
         metadata: {
           gift_ids: items.map((i) => i.giftId).join(","),
+          guest_name: guestName ?? "",
+          message: message ?? "",
         },
       },
     });

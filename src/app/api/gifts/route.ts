@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { listGifts } from "@/firebase/gifts";
-import { getPurchasedProductIds } from "@/firebase/purchases";
 
 export type GiftProduct = {
   giftId: string;
@@ -8,16 +7,12 @@ export type GiftProduct = {
   description: string | null;
   price: number;
   imageUrl: string | null;
-  unique: boolean;
-  purchased: boolean;
+  available: boolean;
 };
 
 export async function GET() {
   try {
-    const [gifts, purchasedIds] = await Promise.all([
-      listGifts(),
-      getPurchasedProductIds(),
-    ]);
+    const gifts = await listGifts();
 
     const products: GiftProduct[] = gifts.map((gift) => ({
       giftId: gift.id,
@@ -25,8 +20,7 @@ export async function GET() {
       description: gift.description,
       price: gift.price,
       imageUrl: gift.imageUrl,
-      unique: gift.unique,
-      purchased: gift.unique && purchasedIds.has(gift.id),
+      available: gift.available,
     }));
 
     return NextResponse.json(products);

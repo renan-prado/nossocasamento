@@ -83,7 +83,7 @@ export default function Home() {
         <AnimatedIconsBackground />
 
         <h2 className="text-md font-bold text-green-foreground leading-8 sm:leading-8 font-serif max-w-sm text-center z-10">
-          Em Junho de 2026, ao pôr do sol de uma quinta-feira de inverno, vamos celebrar nosso amor em uma cerimônia intimista.
+          Em 25 de junho de 2026, ao pôr do sol de uma quinta-feira de inverno, vamos celebrar nosso amor em uma cerimônia intimista.
         </h2>
         
         <div className="z-10">

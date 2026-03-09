@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ArrowUpDown, Pencil, Plus, RefreshCw, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowUpDown, Pencil, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,6 +24,7 @@ import {
   listGuests,
   updateGuest,
 } from "@/firebase/guests";
+import Link from "next/link";
 import { GuestDeleteDialog } from "@/components/admin/GuestDeleteDialog";
 import { GuestFormDialog } from "@/components/admin/GuestFormDialog";
 
@@ -185,11 +186,19 @@ export function GuestManager() {
   return (
     <div className="flex flex-col gap-4 sm:gap-6 p-4 sm:p-6 max-w-6xl mx-auto">
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <h1 className="text-xl sm:text-2xl font-bold text-neutral-900 leading-tight">
-            Gerenciamento de Convidados
-          </h1>
-          <p className="text-sm text-neutral-500 mt-0.5">Danielle & Renan · 25/06/2026</p>
+        <div className="flex items-center gap-3 min-w-0">
+          <Link
+            href="/admin/tchubiraudau"
+            className="flex items-center justify-center w-8 h-8 rounded-lg text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 transition-colors shrink-0"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </Link>
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-neutral-900 leading-tight">
+              Gerenciamento de Convidados
+            </h1>
+            <p className="text-sm text-neutral-500 mt-0.5">Danielle & Renan · 25/06/2026</p>
+          </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <Button

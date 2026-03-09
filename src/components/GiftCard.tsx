@@ -22,8 +22,8 @@ export function GiftCard({ gift }: Props) {
   return (
     <div
       className={`relative flex flex-col rounded-2xl overflow-hidden bg-white/10 backdrop-blur-sm border transition-all duration-200 ${
-        gift.purchased
-          ? "border-white/10 opacity-60"
+        !gift.available
+          ? "border-white/10 opacity-50 grayscale"
           : "border-white/20 hover:border-white/40 hover:bg-white/15"
       }`}
     >
@@ -41,13 +41,6 @@ export function GiftCard({ gift }: Props) {
             <ShoppingBag className="w-12 h-12 text-white/20" />
           </div>
         )}
-        {gift.purchased && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[2px]">
-            <span className="text-xs font-semibold text-white/80 uppercase tracking-widest bg-black/40 px-3 py-1 rounded-full">
-              Presenteado
-            </span>
-          </div>
-        )}
       </div>
 
       <div className="flex flex-col flex-1 gap-3 p-4">
@@ -63,7 +56,11 @@ export function GiftCard({ gift }: Props) {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-auto gap-2">
           <span className="text-sm font-bold text-white/90">{formattedPrice}</span>
 
-          {!gift.purchased && (
+          {!gift.available ? (
+            <span className="text-xs font-semibold text-white/40 uppercase tracking-widest">
+              Presenteado
+            </span>
+          ) : (
             quantity === 0 ? (
               <button
                 type="button"
@@ -88,8 +85,7 @@ export function GiftCard({ gift }: Props) {
                 <button
                   type="button"
                   onClick={() => addItem({ giftId: gift.giftId, name: gift.name, price: gift.price, imageUrl: gift.imageUrl })}
-                  disabled={gift.unique}
-                  className="flex items-center justify-center w-7 h-7 rounded-full bg-white text-neutral-900 hover:bg-white/90 active:scale-95 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-default"
+                  className="flex items-center justify-center w-7 h-7 rounded-full bg-white text-neutral-900 hover:bg-white/90 active:scale-95 transition-all cursor-pointer"
                 >
                   <Plus className="w-3 h-3" />
                 </button>

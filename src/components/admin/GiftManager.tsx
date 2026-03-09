@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { ImageOff, Pencil, Plus, RefreshCw, Trash2 } from "lucide-react";
+import { ArrowLeft, EyeOff, Eye, ImageOff, Pencil, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -22,6 +22,7 @@ import {
   listGifts,
   updateGift,
 } from "@/firebase/gifts";
+import Link from "next/link";
 import { GiftDeleteDialog } from "@/components/admin/GiftDeleteDialog";
 import { GiftFormDialog } from "@/components/admin/GiftFormDialog";
 
@@ -70,16 +71,29 @@ export function GiftManager() {
     await fetchGifts();
   }
 
+  async function handleToggleAvailable(gift: Gift) {
+    await updateGift(gift.id, { available: !gift.available });
+    await fetchGifts();
+  }
+
   const totalValue = gifts.reduce((sum, g) => sum + g.price, 0);
 
   return (
     <div className="flex flex-col gap-4 sm:gap-6 p-4 sm:p-6 max-w-5xl mx-auto">
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <h1 className="text-xl sm:text-2xl font-bold text-neutral-900 leading-tight">
-            Lista de Presentes
-          </h1>
-          <p className="text-sm text-neutral-500 mt-0.5">Danielle & Renan · 25/06/2026</p>
+        <div className="flex items-center gap-3 min-w-0">
+          <Link
+            href="/admin/tchubiraudau"
+            className="flex items-center justify-center w-8 h-8 rounded-lg text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 transition-colors shrink-0"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </Link>
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-neutral-900 leading-tight">
+              Lista de Presentes
+            </h1>
+            <p className="text-sm text-neutral-500 mt-0.5">Danielle & Renan · 25/06/2026</p>
+          </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <Button
@@ -107,9 +121,9 @@ export function GiftManager() {
         </Card>
         <Card>
           <CardContent className="px-4 py-4">
-            <p className="text-xs text-neutral-500 font-medium mb-1">Únicos</p>
+            <p className="text-xs text-neutral-500 font-medium mb-1">Indisponíveis</p>
             <p className="text-2xl sm:text-3xl font-bold text-neutral-900">
-              {gifts.filter((g) => g.unique).length}
+              {gifts.filter((g) => !g.available).length}
             </p>
           </CardContent>
         </Card>
@@ -145,7 +159,7 @@ export function GiftManager() {
                     <TableHead>Nome</TableHead>
                     <TableHead className="hidden sm:table-cell">Descrição</TableHead>
                     <TableHead>Preço</TableHead>
-                    <TableHead>Tipo</TableHead>
+                    <TableHead>Status</TableHead>
                     <TableHead className="text-right">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -180,18 +194,27 @@ export function GiftManager() {
                         })}
                       </TableCell>
                       <TableCell>
-                        {gift.unique ? (
-                          <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">
-                            Único
+                        {gift.available ? (
+                          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
+                            Disponível
                           </Badge>
                         ) : (
-                          <Badge className="bg-neutral-100 text-neutral-600 hover:bg-neutral-100">
-                            Livre
+                          <Badge className="bg-neutral-100 text-neutral-500 hover:bg-neutral-100">
+                            Indisponível
                           </Badge>
                         )}
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className={`h-8 w-8 cursor-pointer ${gift.available ? "text-neutral-500 hover:text-neutral-700" : "text-neutral-400 hover:text-green-600"}`}
+                            onClick={() => handleToggleAvailable(gift)}
+                            title={gift.available ? "Marcar como indisponível" : "Marcar como disponível"}
+                          >
+                            {gift.available ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                          </Button>
                           <Button
                             variant="ghost"
                             size="icon"

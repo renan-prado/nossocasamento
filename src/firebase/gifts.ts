@@ -7,7 +7,7 @@ export type Gift = {
   description: string | null;
   price: number;
   imageUrl: string | null;
-  unique: boolean;
+  available: boolean;
 };
 
 export type GiftPayload = {
@@ -15,7 +15,7 @@ export type GiftPayload = {
   description: string | null;
   price: number;
   imageUrl: string | null;
-  unique: boolean;
+  available: boolean;
 };
 
 export async function listGifts(): Promise<Gift[]> {
@@ -28,7 +28,7 @@ export async function listGifts(): Promise<Gift[]> {
     description: d.get("description") ?? null,
     price: d.get("price") ?? 0,
     imageUrl: d.get("imageUrl") ?? null,
-    unique: d.get("unique") ?? false,
+    available: d.get("available") ?? true,
   }));
 }
 

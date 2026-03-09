@@ -10,6 +10,8 @@ export function GiftCart() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [guestName, setGuestName] = useState("");
+  const [message, setMessage] = useState("");
   const { items, addItem, removeItem, decrementItem, clearCart, totalItems, totalPrice } = useCartStore();
 
   const count = totalItems();
@@ -32,6 +34,8 @@ export function GiftCart() {
             giftId: item.giftId,
             quantity: item.quantity,
           })),
+          guestName: guestName.trim(),
+          message: message.trim(),
         }),
       });
 
@@ -137,6 +141,35 @@ export function GiftCart() {
           </div>
 
           <div className="border-t px-6 py-5 flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="guest-name" className="text-xs font-semibold text-neutral-600 uppercase tracking-wide">
+                  Seu nome
+                </label>
+                <input
+                  id="guest-name"
+                  type="text"
+                  value={guestName}
+                  onChange={(e) => setGuestName(e.target.value)}
+                  placeholder="Como você quer ser identificado?"
+                  className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="guest-message" className="text-xs font-semibold text-neutral-600 uppercase tracking-wide">
+                  Mensagem para os noivos
+                </label>
+                <textarea
+                  id="guest-message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Escreva uma mensagem carinhosa..."
+                  rows={3}
+                  className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all resize-none"
+                />
+              </div>
+            </div>
+
             {error && (
               <p className="text-sm text-red-600 bg-red-50 rounded-xl px-4 py-2">{error}</p>
             )}
@@ -149,10 +182,10 @@ export function GiftCart() {
             <button
               type="button"
               onClick={handleCheckout}
-              disabled={loading}
-              className="w-full rounded-xl bg-neutral-900 text-white py-3 text-sm font-semibold hover:bg-neutral-800 active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+              disabled={loading || !guestName.trim() || !message.trim()}
+              className="w-full rounded-xl bg-neutral-900 text-white py-3 text-sm font-semibold hover:bg-neutral-800 active:scale-[0.98] transition-all disabled:opacity-60 disabled:pointer-events-none cursor-pointer"
             >
-              {loading ? "Redirecionando..." : "Finalizar presente"}
+              {loading ? "Redirecionando..." : "Presentear"}
             </button>
 
             <button
