@@ -92,29 +92,28 @@ export function AboutSection() {
       <FloatingHeartsColumn side="left" />
       <FloatingHeartsColumn side="right" />
 
-      <div className="flex flex-col items-center gap-4 sm:gap-8 h-full pt-10 sm:pt-16">
-        <div className="relative z-10 flex flex-col items-center gap-2 sm:gap-4 px-6 text-center text-green-foreground max-w-[300px] sm:max-w-sm md:max-w-lg lg:max-w-xl">
+      <div className="relative z-10 flex flex-col items-center h-full w-full pt-10 sm:pt-16">
+        <div className="flex flex-col items-center gap-2 sm:gap-4 px-6 text-center text-green-foreground max-w-[300px] sm:max-w-sm md:max-w-lg lg:max-w-xl">
           <p className="text-[10px] sm:text-xs uppercase tracking-[0.5em] sm:tracking-[0.6em] text-green-foreground/50 font-semibold">Nossa história</p>
           <h2 className="text-xl sm:text-3xl md:text-4xl font-serif font-bold leading-tight">Sobre nós</h2>
           <div className="flex flex-col gap-2 sm:gap-3 text-xs sm:text-base md:text-sm font-serif leading-relaxed text-green-foreground/75 pt-2 sm:pt-6">
-          <p>Antes de sermos nós, já existiam duas histórias sendo escritas.Dois caminhos, duas infâncias e dois jeitos de ver o mundo que um dia iriam se encontrar.</p>
-          <p>Nossa história começou no cinema, e talvez isso diga bastante sobre quem somos.Sempre gostamos de arte, cultura e lugares cheios de memória. A Dani, psicóloga, se interessa pelas pessoas e suas histórias. O Renan, programador, gosta de entender como as coisas funcionam e transformar ideias em projetos.</p>
-          <p>Entre diferenças e afinidades, descobrimos o prazer das boas conversas, dos filmes marcantes e dos rolês culturais. E assim, o que começou como encontro virou parceria, daquelas que a gente escolhe construir e agora celebrar.</p>
+            <p>Antes de sermos nós, já existiam duas histórias sendo escritas.Dois caminhos, duas infâncias e dois jeitos de ver o mundo que um dia iriam se encontrar.</p>
+            <p>Nossa história começou no cinema, e talvez isso diga bastante sobre quem somos.Sempre gostamos de arte, cultura e lugares cheios de memória. A Dani, psicóloga, se interessa pelas pessoas e suas histórias. O Renan, programador, gosta de entender como as coisas funcionam e transformar ideias em projetos.</p>
+            <p>Entre diferenças e afinidades, descobrimos o prazer das boas conversas, dos filmes marcantes e dos rolês culturais. E assim, o que começou como encontro virou parceria, daquelas que a gente escolhe construir e agora celebrar.</p>
           </div>
         </div>
 
-        
-      </div>
-      <div className="absolute -bottom-20 left-0 right-0 mx-auto z-10 pointer-events-none w-[88vw] flex justify-center items-center">
+        <div className="flex-1 min-h-0 w-[88vw] md:w-[60vw] lg:w-[50vw] flex justify-center items-end pointer-events-none overflow-hidden">
           <Image
             src="/vintage-2.png"
             alt=""
             width={1000}
             height={1000}
-            className="w-full h-auto shadow-2xl opacity-80 md:w-[60vw] lg:w-[50vw]"
+            className="w-full max-h-full object-contain object-bottom shadow-2xl opacity-80"
             priority={false}
           />
         </div>
+      </div>
     </>
   )
 }
