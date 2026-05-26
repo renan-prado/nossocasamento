@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Gift, Users, MessageSquare, ChevronRight } from "lucide-react";
+import { Gift, Users, MessageSquare, ChevronRight, CheckCheck } from "lucide-react";
 
 export const metadata = {
   title: "Admin · Menu",
@@ -17,6 +17,12 @@ const pages = [
     icon: Users,
     label: "Convidados",
     description: "Gerenciar convidados do casamento",
+  },
+  {
+    href: "/admin/segunda-confirmacao",
+    icon: CheckCheck,
+    label: "Segunda confirmação",
+    description: "Reconfirmação dos convidados que já aceitaram",
   },
   {
     href: "/admin/mensagens",

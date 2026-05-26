@@ -36,8 +36,10 @@ export type Guest = {
   familyName: string;
   status: GuestStatus;
   simulado: GuestStatus;
+  secondConfirmation: GuestStatus;
   type: GuestType;
   updatedAt: Date | null;
+  secondConfirmationUpdatedAt: Date | null;
 };
 
 export type GuestPayload = {
@@ -68,8 +70,10 @@ export async function listGuests(): Promise<Guest[]> {
     familyName: d.get("familyName") ?? "",
     status: (d.get("status") as GuestStatus) ?? "pending",
     simulado: (d.get("simulado") as GuestStatus) ?? (d.get("status") as GuestStatus) ?? "pending",
+    secondConfirmation: (d.get("secondConfirmation") as GuestStatus) ?? "pending",
     type: (d.get("type") as GuestType) ?? "full",
     updatedAt: d.get("updatedAt")?.toDate?.() ?? null,
+    secondConfirmationUpdatedAt: d.get("secondConfirmationUpdatedAt")?.toDate?.() ?? null,
   }));
 }
 
@@ -94,4 +98,15 @@ export async function updateGuest(id: string, payload: Partial<GuestPayload>): P
 export async function deleteGuest(id: string): Promise<void> {
   const db = getFirestoreDb();
   await deleteDoc(doc(db, "guests", id));
+}
+
+export async function updateGuestSecondConfirmation(
+  id: string,
+  status: GuestStatus,
+): Promise<void> {
+  const db = getFirestoreDb();
+  await updateDoc(doc(db, "guests", id), {
+    secondConfirmation: status,
+    secondConfirmationUpdatedAt: serverTimestamp(),
+  });
 }

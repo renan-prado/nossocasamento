@@ -156,7 +156,7 @@ export function RsvpSection() {
 
           <div className="w-full h-px bg-neutral-200" />
 
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-2 max-h-[40vh] overflow-y-auto pr-1">
             {guests.map((guest) => (
               <li
                 key={guest.id}

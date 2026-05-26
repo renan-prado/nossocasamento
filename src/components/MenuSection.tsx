@@ -9,10 +9,10 @@ type MenuItem = {
 }
 
 const items: MenuItem[] = [
-  { id: "rsvp", label: "Confirme sua presença", image: "/mosaico/mosaico (1).JPG" },
+  { id: "guest-manual", label: "Manual dos convidados", image: "/mosaico/mosaico (1).JPG" },
+  { id: "second-confirmation", label: "Confirme sua presença", image: "/mosaico/mosaico (4).JPG" },
   { id: "gifts", label: "Presenteie os noivos", image: "/mosaico/mosaico (3).JPG" },
   { id: "venue", label: "Local e espaço", image: "/mosaico/mosaico (9).JPG" },
-  { id: "countdown", label: "Data e horário", image: "/mosaico/mosaico (5).JPG" },
   { id: "about", label: "Sobre nós", image: "/mosaico/mosaico (6).JPG" },
   { id: "photos", label: "Galeria de fotos", image: "/mosaico/mosaico (7).JPG" },
 ]
