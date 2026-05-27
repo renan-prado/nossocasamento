@@ -41,7 +41,7 @@ export function GuestManualSection() {
         <div className="w-12 h-px bg-bege/40 mt-2" />
       </div>
 
-      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 w-full">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 w-full max-h-[55vh] overflow-y-auto sm:max-h-none sm:overflow-visible pr-1 sm:pr-0">
         {items.map(({ icon: Icon, label }) => (
           <li key={label} className="flex items-center gap-4 min-h-14">
             <Icon className="h-7 w-7 text-bege/80 shrink-0" strokeWidth={1.5} />
