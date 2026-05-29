@@ -52,6 +52,18 @@ export default function Home() {
         <GuestManualSection />
       </SnapSection>
 
+
+      <SnapSection name="menu" className="bg-bege px-6">
+        <Image
+          src="/mosaico/mosaico (2).JPG"
+          alt=""
+          fill
+          className="absolute inset-0 object-cover brightness-[0.15]"
+          priority={false}
+        />
+        <MenuSection />
+      </SnapSection>
+
       <SnapSection
         name="second-confirmation"
         className="bg-green flex-col gap-8 px-6 py-10"
@@ -66,16 +78,6 @@ export default function Home() {
         <SecondConfirmationSection />
       </SnapSection>
 
-      <SnapSection name="menu" className="bg-bege px-6">
-        <Image
-          src="/mosaico/mosaico (2).JPG"
-          alt=""
-          fill
-          className="absolute inset-0 object-cover brightness-[0.15]"
-          priority={false}
-        />
-        <MenuSection />
-      </SnapSection>
 
       <SnapSection
         name="rsvp"
